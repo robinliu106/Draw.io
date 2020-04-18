@@ -1,0 +1,22 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robinliu106/chat-app-api.git"
+  },
+  "author": "Robin Liu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robinliu106/chat-app-api/issues"
+  },
+  "homepage": "https://github.com/robinliu106/chat-app-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
