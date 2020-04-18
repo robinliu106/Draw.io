@@ -21,6 +21,6 @@ document.querySelector("#send-location").addEventListener("click", (e) => {
             longitude: position.coords.longitude,
         };
 
-        socket.emit("location", locationObject);
+        socket.emit("sendLocation", locationObject);
     });
 });
