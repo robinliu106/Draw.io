@@ -14,16 +14,13 @@ app.use(express.static(publicDirectoryPath));
 
 let count = 0;
 
-//socket.emit => only 1 client receives (on init)
-//io.emit => every clients receive
-
 io.on("connection", (socket) => {
     console.log("New web socket connection");
-    socket.emit("countUpdated", count);
 
-    socket.on("increment", () => {
-        count++;
-        io.emit("countUpdated", count);
+    socket.emit("welcomeMessage", "Welcome to the server :) !");
+
+    socket.on("sendMessage", (message) => {
+        io.emit("message", message);
     });
 });
 
