@@ -1,9 +1,17 @@
+const date = new Date();
+
 const generateMessage = (text) => {
-    const date = new Date();
     return {
         text,
         createdAt: date.getTime(),
     };
 };
 
-module.exports = { generateMessage };
+const generateLocationMessage = (url) => {
+    return {
+        url,
+        createdAt: date.getTime(),
+    };
+};
+
+module.exports = { generateMessage, generateLocationMessage };
