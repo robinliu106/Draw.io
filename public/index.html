@@ -1,25 +1,45 @@
 <!DOCTYPE html>
  <head>
+        <title>Chat App!</title>
+        <link rel="icon" href="/img/favicon.png">
+        <link rel="stylesheet" href="/css/styles.min.css">
+</head>
      <body>
-         Chat App!!!
+         <div class="chat">
+             <div class="chat__sidebar"></div>
+             <div class="chat__main">
 
-        <div id="messages"></div>
+                <div id="messages" class="chat__messages"></div>
 
-         <form id="message-form">
-             <input name="message" placeholder="Message">
-             <button>Send Message</button>
-         </form>
-         <button id="send-location">Send Location</button>
+                <div class="compose">
+                    <form id="message-form">
+                        <input name="message" placeholder="Message">
+                        <button>Send</button>
+                    </form>
+                    <button id="send-location">Send Location</button>
+                </div>
+
+             </div>
+
+         </div>
 
          <script id="message-template" type="text/html">
-             <div>
-                <p>{{createdAt}} - {{message}}</p>    
+             <div class="message">
+                 <p>
+                     <span class="message__name">Some User Name</span>
+                     <span class="message__meta">{{createdAt}}
+                 </p>
+                <p>{{message}}</p>    
             </div>
          </script>
 
          <script id="location-message-template" type="text/html">
             <div>
-               <p>{{createdAt}} - <a href="{{url}}" target="_blank">My Current Location</a></p>    
+                <p>
+                    <span class="message__name">Some User Name</span>
+                    <span class="message__meta">{{createdAt}}
+                </p>
+               <p><a href="{{url}}" target="_blank">My Current Location</a></p>    
            </div>
         </script>
 
@@ -29,5 +49,5 @@
          <script src="/socket.io/socket.io.js"></script>
          <script src="/js/chat.js"></script>
      </body>
- </head>
+ 
 </html>
