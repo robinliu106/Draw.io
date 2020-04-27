@@ -3,6 +3,10 @@ const express = require("express");
 const http = require("http");
 const socketio = require("socket.io");
 const Filter = require("bad-words");
+const googleTranslate = require("google-translate")(
+    process.env.TRANSLATION_API_KEY
+);
+
 const {
     generateMessage,
     generateLocationMessage,
@@ -37,6 +41,7 @@ io.on("connection", (socket) => {
         socket.join(user.room);
 
         socket.emit("message", generateMessage("Admin", "Welcome!"));
+
         socket.broadcast
             .to(user.room)
             .emit(
@@ -60,10 +65,14 @@ io.on("connection", (socket) => {
             return callback("Profanity is not allowed");
         }
 
-        io.to(user.room).emit(
-            "message",
-            generateMessage(user.username, message)
-        );
+        googleTranslate.translate(message, "es", (error, translation) => {
+            console.log(translation);
+
+            io.to(user.room).emit(
+                "message",
+                generateMessage(user.username, translation.translatedText)
+            );
+        });
 
         callback();
     });
@@ -105,3 +114,12 @@ io.on("connection", (socket) => {
 server.listen(port, () => {
     console.log(`Server is up on port: ${port}`);
 });
+
+// const googleTranslate = require("google-translate")(
+//     process.env.TRANSLATION_API_KEY
+// );
+
+// const textToTranslate = "my name is robin, I like Marvel movies";
+// googleTranslate.translate(textToTranslate, "es", (error, translation) => {
+//     console.log(translation);
+// });
