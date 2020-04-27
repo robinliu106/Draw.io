@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const http = require("http");
 const socketio = require("socket.io");
+const util = require("util");
 const Filter = require("bad-words");
 const googleTranslate = require("google-translate")(
     process.env.TRANSLATION_API_KEY
@@ -65,22 +66,63 @@ io.on("connection", (socket) => {
             return callback("Profanity is not allowed");
         }
 
-        //avoid using nested callbacks?
-        googleTranslate.translate(message, "zh", (error, translation) => {
-            const translationOne = translation.translatedText;
-            googleTranslate.translate(
-                translationOne,
-                "en",
-                (error, translationTwo) => {
-                    const messageFinal = translationTwo.translatedText;
+        //async await version
+        const translationPromise = util.promisify(googleTranslate.translate);
 
-                    io.to(user.room).emit(
-                        "message",
-                        generateMessage(user.username, messageFinal)
-                    );
-                }
+        try {
+            const translateOne = await translationPromise(message, "es"); //translate to another language
+
+            //translate back to english
+            const translationTwo = await translationPromise(
+                translateOne.translatedText,
+                "en"
             );
-        });
+
+            //emit english message
+            io.to(user.room).emit(
+                "message",
+                generateMessage(user.username, translationTwo.translatedText)
+            );
+        } catch (error) {
+            console.log("Translation Error: ", error);
+        }
+
+        //callback version
+        // googleTranslate.translate(message, "zh", (error, translation) => {
+        //     const translationOne = translation.translatedText;
+        //     googleTranslate.translate(
+        //         translationOne,
+        //         "en",
+        //         (error, translationTwo) => {
+        //             const messageFinal = translationTwo.translatedText;
+
+        //             io.to(user.room).emit(
+        //                 "message",
+        //                 generateMessage(user.username, messageFinal)
+        //             );
+        //         }
+        //     );
+        // });
+
+        //promise version
+        // const translationPromise = util.promisify(googleTranslate.translate);
+
+        // translationPromise(message, "zh")
+        //     .then((translatedOne) => {
+        //         console.log("translatedOne", translatedOne);
+        //         translationPromise(translatedOne.translatedText, "en")
+        //             .then((translateTwo) => {
+        //                 io.to(user.room).emit(
+        //                     "message",
+        //                     generateMessage(
+        //                         user.username,
+        //                         translateTwo.translatedText
+        //                     )
+        //                 );
+        //             })
+        //             .catch((error) => console.log(error));
+        //     })
+        //     .catch((error) => console.log(error));
 
         callback();
     });
@@ -131,3 +173,18 @@ server.listen(port, () => {
 // googleTranslate.translate(textToTranslate, "es", (error, translation) => {
 //     console.log(translation);
 // });
+
+// const doTranslate = (message) => {
+//     return googleTranslate
+//         .translate(message, "zh", (error, translation) => {
+//             // return translation.translatedText;
+//         })
+//         .asPromise();
+//     // return response;
+// };
+
+// googleTranslate.translate(translationOne, "en", (error, translationTwo) => {
+//     const messageFinal = translationTwo.translatedText;
+// });
+
+// io.to(user.room).emit("message", generateMessage(user.username, messageFinal));
