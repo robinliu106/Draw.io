@@ -164,27 +164,3 @@ io.on("connection", (socket) => {
 server.listen(port, () => {
     console.log(`Server is up on port: ${port}`);
 });
-
-// const googleTranslate = require("google-translate")(
-//     process.env.TRANSLATION_API_KEY
-// );
-
-// const textToTranslate = "my name is robin, I like Marvel movies, what about you?";
-// googleTranslate.translate(textToTranslate, "es", (error, translation) => {
-//     console.log(translation);
-// });
-
-// const doTranslate = (message) => {
-//     return googleTranslate
-//         .translate(message, "zh", (error, translation) => {
-//             // return translation.translatedText;
-//         })
-//         .asPromise();
-//     // return response;
-// };
-
-// googleTranslate.translate(translationOne, "en", (error, translationTwo) => {
-//     const messageFinal = translationTwo.translatedText;
-// });
-
-// io.to(user.room).emit("message", generateMessage(user.username, messageFinal));
