@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
         callback();
     });
 
-    socket.on("sendMessage", (message, callback) => {
+    socket.on("sendMessage", async (message, callback) => {
         const filter = new Filter();
         const user = getUser(socket.id);
 
@@ -65,12 +65,20 @@ io.on("connection", (socket) => {
             return callback("Profanity is not allowed");
         }
 
-        googleTranslate.translate(message, "es", (error, translation) => {
-            console.log(translation);
+        //avoid using nested callbacks?
+        googleTranslate.translate(message, "zh", (error, translation) => {
+            const translationOne = translation.translatedText;
+            googleTranslate.translate(
+                translationOne,
+                "en",
+                (error, translationTwo) => {
+                    const messageFinal = translationTwo.translatedText;
 
-            io.to(user.room).emit(
-                "message",
-                generateMessage(user.username, translation.translatedText)
+                    io.to(user.room).emit(
+                        "message",
+                        generateMessage(user.username, messageFinal)
+                    );
+                }
             );
         });
 
@@ -119,7 +127,7 @@ server.listen(port, () => {
 //     process.env.TRANSLATION_API_KEY
 // );
 
-// const textToTranslate = "my name is robin, I like Marvel movies";
+// const textToTranslate = "my name is robin, I like Marvel movies, what about you?";
 // googleTranslate.translate(textToTranslate, "es", (error, translation) => {
 //     console.log(translation);
 // });
