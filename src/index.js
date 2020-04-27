@@ -64,7 +64,8 @@ io.on("connection", (socket) => {
         const dumbTranslate = true;
 
         if (filter.isProfane(message)) {
-            return callback("Profanity is not allowed");
+            message = filter.clean(message);
+            // return callback("Profanity is not allowed");
         }
 
         if (dumbTranslate) {
