@@ -61,14 +61,14 @@ io.on("connection", (socket) => {
     socket.on("sendMessage", async (message, callback) => {
         const filter = new Filter();
         const user = getUser(socket.id);
-        const doTranslate = true;
+        const dumbTranslate = true;
 
         if (filter.isProfane(message)) {
             return callback("Profanity is not allowed");
         }
 
-        if (doTranslate) {
-            message = await getTranslation(message);
+        if (dumbTranslate) {
+            message = await getDumbTranslation(message);
         }
 
         io.to(user.room).emit(
@@ -113,12 +113,13 @@ io.on("connection", (socket) => {
     });
 });
 
-const getTranslation = async (message) => {
+const getDumbTranslation = async (message) => {
     //async await version
     const translationPromise = util.promisify(googleTranslate.translate);
 
     try {
-        const translateOne = await translationPromise(message, "es"); //translate to another language
+        //translate to another language
+        const translateOne = await translationPromise(message, "es");
 
         //translate back to english
         const translationTwo = await translationPromise(
