@@ -183,5 +183,5 @@ button:disabled {
 }
 
 #canvas {
-    display: block;
+    /* display: block; */
 }
