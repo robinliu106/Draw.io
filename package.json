@@ -24,6 +24,7 @@
         "express": "^4.17.1",
         "google-translate": "^3.0.0",
         "heroku": "^7.39.3",
+        "node-localstorage": "^2.1.6",
         "node-static": "^0.7.11",
         "socket.io": "^2.3.0"
     },
