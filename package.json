@@ -1,7 +1,7 @@
 {
-    "name": "chat-app",
+    "name": "Draw.io",
     "version": "1.0.0",
-    "description": "Robin's chat app",
+    "description": "Robin's Draw App",
     "main": "index.js",
     "scripts": {
         "start": "node src/index.js",
@@ -24,6 +24,7 @@
         "express": "^4.17.1",
         "google-translate": "^3.0.0",
         "heroku": "^7.39.3",
+        "node-static": "^0.7.11",
         "socket.io": "^2.3.0"
     },
     "devDependencies": {

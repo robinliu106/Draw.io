@@ -7,6 +7,8 @@ const Filter = require("bad-words");
 const googleTranslate = require("google-translate")(
     process.env.TRANSLATION_API_KEY
 );
+const sstatic = require("node-static");
+const fileServer = new sstatic.Server();
 
 const {
     generateMessage,
@@ -61,7 +63,7 @@ io.on("connection", (socket) => {
     socket.on("sendMessage", async (message, callback) => {
         const filter = new Filter();
         const user = getUser(socket.id);
-        const dumbTranslate = true;
+        const dumbTranslate = false;
 
         if (filter.isProfane(message)) {
             message = filter.clean(message);
@@ -69,7 +71,12 @@ io.on("connection", (socket) => {
         }
 
         if (dumbTranslate) {
-            message = await getDumbTranslation(message);
+            try {
+                message = await getDumbTranslation(message);
+            } catch (error) {
+                console.log("translation error");
+                callback(error);
+            }
         }
 
         io.to(user.room).emit(
@@ -111,6 +118,10 @@ io.on("connection", (socket) => {
         );
 
         callback();
+    });
+
+    socket.on("draw", function (data) {
+        socket.broadcast.emit("draw", data);
     });
 });
 
