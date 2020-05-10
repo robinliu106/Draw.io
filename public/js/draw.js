@@ -1,27 +1,30 @@
 var canvas = document.getElementById("canvas");
-var context = canvas.getContext("2d");
 canvas.width = (window.innerWidth * 2) / 3;
 canvas.height = window.innerHeight * 0.9;
 
+var context = canvas.getContext("2d");
 context.strokeStyle = "black";
-// const $changeColorBlue = document.querySelector("#change-color-blue");
-
-// $changeColorBlue.addEventListener("click", (e) => {
-//     drawColor = "blue";
-// });
+context.lineWidth = 5;
 
 function changeColor(color) {
-    console.log("changing color to ", color);
     context.strokeStyle = color;
+}
+
+function changeWidth(width) {
+    context.lineWidth = width;
+}
+
+function resetCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawLine(context, x1, y1, x2, y2) {
     context.beginPath();
     context.moveTo(x1, y1);
     context.lineTo(x2, y2);
+
     context.stroke();
     context.closePath();
-    // context.strokeStyle = drawColor;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -41,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     canvas.onmousemove = function (e) {
-        x = e.clientX - 220;
+        x = e.clientX - 180;
         y = e.clientY;
 
         if (drawing) {

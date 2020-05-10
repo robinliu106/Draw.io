@@ -1,9 +1,10 @@
 const users = [];
 
-const addUser = ({ id, username, room }) => {
+const addUser = ({ id, username, room, score }) => {
     //Clean the data
     username = username.trim().toLowerCase();
     room = room.trim().toLowerCase();
+    score = 0;
 
     //Validate the data
     if (!username || !room) {
@@ -25,7 +26,7 @@ const addUser = ({ id, username, room }) => {
     }
 
     //Store user
-    const user = { id, username, room };
+    const user = { id, username, room, score };
     users.push(user);
     return { user };
 };

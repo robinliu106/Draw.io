@@ -22,6 +22,8 @@ const {
     getUsersInRoom,
 } = require("./utils/users");
 
+const { words } = require("./utils/store");
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -33,6 +35,7 @@ app.use(express.static(publicDirectoryPath));
 
 io.on("connection", (socket) => {
     console.log("New web socket connection");
+    const currentWord = words[1];
 
     socket.on("join", (options, callback) => {
         const { error, user } = addUser({ id: socket.id, ...options }); //...spread operator
@@ -65,24 +68,33 @@ io.on("connection", (socket) => {
         const user = getUser(socket.id);
         const dumbTranslate = false;
 
-        if (filter.isProfane(message)) {
-            message = filter.clean(message);
-            // return callback("Profanity is not allowed");
-        }
+        // if (filter.isProfane(message)) {
+        //     message = filter.clean(message);
+        //     // return callback("Profanity is not allowed");
+        // }
 
-        if (dumbTranslate) {
-            try {
-                message = await getDumbTranslation(message);
-            } catch (error) {
-                console.log("translation error");
-                callback(error);
-            }
-        }
+        // if (dumbTranslate) {
+        //     try {
+        //         message = await getDumbTranslation(message);
+        //     } catch (error) {
+        //         console.log("translation error");
+        //         callback(error);
+        //     }
+        // }
 
-        io.to(user.room).emit(
-            "message",
-            generateMessage(user.username, message)
-        );
+        if (message === currentWord) {
+            io.to(user.room).emit(
+                "message",
+                generateMessage(user.username, "Got the word!")
+            );
+            user.score += 1;
+            console.log("user's new score is ", user.username, user.score);
+        } else {
+            io.to(user.room).emit(
+                "message",
+                generateMessage(user.username, message)
+            );
+        }
 
         callback();
     });
@@ -150,7 +162,6 @@ const getDumbTranslation = async (message) => {
 server.listen(port, () => {
     console.log(`Server is up on port: ${port}`);
 });
-
 //callback version of translate message
 // googleTranslate.translate(message, "zh", (error, translation) => {
 //     const translationOne = translation.translatedText;
