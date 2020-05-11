@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     canvas.onmousemove = function (e) {
-        x = e.clientX - 180;
+        x = e.clientX - 200;
         y = e.clientY;
 
         if (drawing) {
