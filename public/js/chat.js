@@ -64,10 +64,11 @@ socket.on("locationMessage", (message) => {
     autoScroll();
 });
 
-socket.on("roomData", ({ room, users }) => {
+socket.on("roomData", ({ room, users, score }) => {
     const html = Mustache.render(sidebarTemplate, {
         room,
         users,
+        score,
     });
     document.querySelector("#sidebar").innerHTML = html;
 });

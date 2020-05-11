@@ -53,7 +53,6 @@ io.on("connection", (socket) => {
                 "message",
                 generateMessage("Admin", `${user.username} has joined!`)
             );
-
         io.to(user.room).emit("roomData", {
             room: user.room,
             users: getUsersInRoom(user.room),
@@ -82,12 +81,18 @@ io.on("connection", (socket) => {
         // }
 
         if (message === currentWord) {
+            user.score += 1;
+
             io.to(user.room).emit(
                 "message",
                 generateMessage(user.username, "Got the word!")
             );
-            user.score += 1;
-            console.log("user's new score is ", user.username, user.score);
+
+            io.to(user.room).emit("roomData", {
+                room: user.room,
+                users: getUsersInRoom(user.room),
+                score: user.score,
+            });
         } else {
             io.to(user.room).emit(
                 "message",
