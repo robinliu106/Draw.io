@@ -137,11 +137,15 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("draw", data);
     });
 
-    socket.on("clearCanvas", function (data) {
+    socket.on("emitClearCanvas", function (data) {
         const user = getUser(socket.id);
-        console.log("server received clear canvas");
+        io.in(user.room).emit("doClearCanvas");
+    });
 
-        io.in(user.room).emit("clearedCanvas");
+    socket.on("emitChangeColor", function (color) {
+        const user = getUser(socket.id);
+        console.log("change color ", color);
+        io.in(user.room).emit("doChangeColor", color);
     });
 });
 

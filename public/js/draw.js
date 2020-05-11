@@ -6,22 +6,17 @@ var context = canvas.getContext("2d");
 context.strokeStyle = "black";
 context.lineWidth = 5;
 
-function changeColor(color) {
-    context.strokeStyle = color;
-}
-
 function changeWidth(width) {
     context.lineWidth = width;
 }
 
 function emitClearCanvas() {
-    console.log("emitted clear canvas");
-    socket.emit("clearCanvas");
+    socket.emit("emitClearCanvas");
 }
 
-// function clearCanvas() {
-//     context.clearRect(0, 0, canvas.width, canvas.height);
-// }
+function emitChangeColor(color) {
+    socket.emit("emitChangeColor", color);
+}
 
 function drawLine(context, x1, y1, x2, y2) {
     context.beginPath();
@@ -70,8 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
         drawLine(context, data.x1, data.y1, data.x2, data.y2);
     });
 
-    socket.on("clearedCanvas", function (data) {
-        console.log("user received cleared");
+    socket.on("doClearCanvas", (data) => {
         context.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    socket.on("doChangeColor", (color) => {
+        console.log(color);
+        context.strokeStyle = color;
     });
 });
