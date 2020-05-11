@@ -22,7 +22,8 @@ const {
     getUsersInRoom,
 } = require("./utils/users");
 
-const { words } = require("./utils/store");
+const words = require("./utils/words");
+// const clearCanvas = require("../public/js/draw");
 
 const app = express();
 const server = http.createServer(app);
@@ -134,6 +135,13 @@ io.on("connection", (socket) => {
 
     socket.on("draw", function (data) {
         socket.broadcast.emit("draw", data);
+    });
+
+    socket.on("clearCanvas", function (data) {
+        const user = getUser(socket.id);
+        console.log("server received clear canvas");
+
+        io.sockets.emit("clearedCanvas");
     });
 });
 

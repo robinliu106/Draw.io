@@ -14,9 +14,14 @@ function changeWidth(width) {
     context.lineWidth = width;
 }
 
-function resetCanvas() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+function emitClearCanvas() {
+    console.log("emitted clear canvas");
+    socket.emit("clearCanvas");
 }
+
+// function clearCanvas() {
+//     context.clearRect(0, 0, canvas.width, canvas.height);
+// }
 
 function drawLine(context, x1, y1, x2, y2) {
     context.beginPath();
@@ -31,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var drawing = false;
     var x, y, prevX, prevY;
 
-    var socket = io.connect();
+    // var socket = io.connect();
 
     canvas.onmousedown = function (e) {
         drawing = true;
@@ -63,5 +68,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     socket.on("draw", function (data) {
         drawLine(context, data.x1, data.y1, data.x2, data.y2);
+    });
+
+    socket.on("clearedCanvas", function (data) {
+        console.log("user received cleared");
+        context.clearRect(0, 0, canvas.width, canvas.height);
     });
 });
