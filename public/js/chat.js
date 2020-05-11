@@ -62,13 +62,14 @@ socket.on("locationMessage", (message) => {
     autoScroll();
 });
 
-socket.on("roomData", ({ room, users, score }) => {
-    var count = 10; //need to update
+socket.on("roomData", ({ room, users, score, currentRound }) => {
+    // var count = 10; //need to update
 
     const html = Mustache.render(sidebarTemplate, {
         room,
         users,
         score,
+        currentRound,
     });
     document.querySelector("#sidebar").innerHTML = html;
 });

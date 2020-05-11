@@ -19,8 +19,8 @@ const {
     getUser,
     getUsersInRoom,
 } = require("./utils/users");
-
-const { words, roundNum } = require("./utils/state");
+let currentRound = 1;
+const { words, updateRoundCount } = require("./utils/state");
 
 const getDumbTranslation = require("./utils/translate");
 
@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
         io.to(user.room).emit("roomData", {
             room: user.room,
             users: getUsersInRoom(user.room),
+            currentRound,
         });
 
         callback();
@@ -82,7 +83,7 @@ io.on("connection", (socket) => {
         // }
 
         if (message === currentWord) {
-            if (user.score < roundNum) {
+            if (user.score < currentRound) {
                 user.score += 1;
                 console.log("user score updated", user);
             }
@@ -92,10 +93,14 @@ io.on("connection", (socket) => {
                 generateMessage(user.username, "Got the word!")
             );
 
+            currentRound = updateRoundCount(currentRound);
+            console.log("currentRound", currentRound);
+
             io.to(user.room).emit("roomData", {
                 room: user.room,
                 users: getUsersInRoom(user.room),
                 score: user.score,
+                currentRound,
             });
         } else {
             io.to(user.room).emit(
