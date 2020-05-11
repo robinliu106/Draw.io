@@ -141,7 +141,7 @@ io.on("connection", (socket) => {
         const user = getUser(socket.id);
         console.log("server received clear canvas");
 
-        io.sockets.emit("clearedCanvas");
+        io.in(user.room).emit("clearedCanvas");
     });
 });
 
