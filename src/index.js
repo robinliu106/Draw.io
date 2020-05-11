@@ -7,8 +7,6 @@ const Filter = require("bad-words");
 const googleTranslate = require("google-translate")(
     process.env.TRANSLATION_API_KEY
 );
-const sstatic = require("node-static");
-const fileServer = new sstatic.Server();
 
 const {
     generateMessage,
@@ -144,7 +142,6 @@ io.on("connection", (socket) => {
 
     socket.on("emitChangeColor", function (color) {
         const user = getUser(socket.id);
-        console.log("change color ", color);
         io.in(user.room).emit("doChangeColor", color);
     });
 });

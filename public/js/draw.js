@@ -70,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     socket.on("doChangeColor", (color) => {
-        console.log(color);
         context.strokeStyle = color;
     });
 });

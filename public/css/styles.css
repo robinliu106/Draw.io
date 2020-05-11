@@ -56,6 +56,34 @@ button:disabled {
     background: #7c5cbf94;
 }
 
+#button-red {
+    background: red;
+}
+
+#button-orange {
+    background: orange;
+}
+
+#button-yellow {
+    background: yellow;
+}
+
+#button-black {
+    background: black;
+}
+
+#button-blue {
+    background: blue;
+}
+
+#button-white {
+    border: 1px;
+}
+
+#button-green {
+    background: green;
+}
+
 /* Join Page Styles */
 
 .centered-form {
